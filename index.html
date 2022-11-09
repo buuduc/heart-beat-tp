@@ -159,12 +159,11 @@ var Particle = (function() {
     this.velocity.y += this.acceleration.y * deltaTime;
     this.age += deltaTime;
   };
-  Particle.prototype.draw = function(context, image, color) {
+  Particle.prototype.draw = function(context, image) {
     function ease(t) {
       return (--t) * t * t + 1;
     }
     var size = image.width * ease(this.age / settings.particles.duration);
-    context.fillStyle = color;
     context.globalAlpha = 1 - this.age / settings.particles.duration;
     context.drawImage(image, this.position.x - size / 2, this.position.y - size / 2, size, size);
   };
@@ -217,17 +216,17 @@ var ParticlePool = (function() {
    
    
   };
-  ParticlePool.prototype.draw = function(context, image, color) {
+  ParticlePool.prototype.draw = function(context, image) {
     // draw active particles
     if (firstActive < firstFree) {
       for (i = firstActive; i < firstFree; i++)
-        particles[i].draw(context, image, color);
+        particles[i].draw(context, image);
     }
     if (firstFree < firstActive) {
       for (i = firstActive; i < particles.length; i++)
-        particles[i].draw(context, image, color);
+        particles[i].draw(context, image);
       for (i = 0; i < firstFree; i++)
-        particles[i].draw(context, image, color);
+        particles[i].draw(context, image);
     }
   };
   return ParticlePool;
@@ -237,7 +236,7 @@ var ParticlePool = (function() {
  */
 
 (function(canvas) {
-  var colorList = ['#fbf8ccff', '#fde4cfff', '#ffcfd2ff', '#f1c0e8ff', '#cfbaf0ff', '#a3c4f3ff', '#90dbf4ff', '#8eecf5ff', '#98f5e1ff', '#b9fbc0ff',]
+  var colorList = ['#FF5CA4','#fbf8ccff', '#fde4cfff', '#ffcfd2ff', '#f1c0e8ff', '#cfbaf0ff', '#a3c4f3ff', '#90dbf4ff', '#8eecf5ff', '#98f5e1ff', '#b9fbc0ff',]
   var context = canvas.getContext('2d'),
       particles = new ParticlePool(settings.particles.length),
       particleRate = settings.particles.length / settings.particles.duration, // particles/sec
@@ -250,10 +249,8 @@ var ParticlePool = (function() {
       130 * Math.cos(t) - 50 * Math.cos(2 * t) - 20 * Math.cos(3 * t) - 10 * Math.cos(4 * t) + 25
     );
   }
-  var coreColor = '#FF5CA4'
-
-  // creating the particle image using a dummy canvas
-  var image = (function() {
+  var coreColor = colorList[0]
+  var renderImage =  function(crrColor) {
     var canvas  = document.createElement('canvas'),
         context = canvas.getContext('2d');
     canvas.width  = settings.particles.size;
@@ -277,14 +274,18 @@ var ParticlePool = (function() {
     }
     context.closePath();
     // create the fill
-    context.fillStyle = coreColor;
-    console.log('🚀 🚀 file: index.html 🚀 line 280 🚀 image 🚀 coreColor', coreColor)
+    context.fillStyle = crrColor;
     context.fill();
     // create the image
     var image = new Image();
     image.src = canvas.toDataURL();
     return image;
-  })(coreColor);
+  }
+
+  var imageCollection = {}
+  colorList.forEach(color => { imageCollection[color]= renderImage(color)})
+  var image = imageCollection[colorList[0]]
+  console.log('🚀 🚀 file: index.html 🚀 line 320 🚀 imageList', imageCollection)
  
   // render that thing!
   function render() {
@@ -296,9 +297,9 @@ var ParticlePool = (function() {
         deltaTime = newTime - (time || newTime);
     time = newTime;
     $("#text-desc").css('color', coreColor);
+    var image =  imageCollection[coreColor]
     // clear canvas
     context.clearRect(0, 0, canvas.width, canvas.height);
-    context.fillStyle = coreColor;
    
     // create new particles
     var amount = particleRate * deltaTime;
@@ -311,7 +312,7 @@ var ParticlePool = (function() {
    
     // update and draw particles
     particles.update(deltaTime);
-    particles.draw(context, image, coreColor);
+    particles.draw(context, image);
   }
  
   // handle (re-)sizing of the canvas
@@ -325,10 +326,6 @@ var ParticlePool = (function() {
     setInterval(() => {
     crrNumber = crrNumber >= colorList.length-1 ? 0 : crrNumber + 1
     coreColor = colorList[crrNumber]
-    //  const canvas.
-    //  console.log('🚀 🚀 file: index.html 🚀 line 331 🚀 setInterval 🚀 canvas', canvas)
-      //  context = canvas.getContext('2d');
-      //  canvas.fillStyle = coreColor;
     }, 1500);
     // delay rendering bootstrap
     setTimeout(function () {
@@ -353,10 +350,8 @@ var ParticlePool = (function() {
         margin-bottom: 5px;
         text-align: center;">For my love !</div>
   <script>
-      const text = ["Trúc Phương", "Đáng Yêu", "Dễ Thương", "Luôn Thấu Hiểu", "I Love You !"];
-      
+    const text = ["Gửi Trúc Phương!", "Cảm Ơn Em", "Đã Bên Anh", "Và Luôn...", "Lắng Nghe" ,"San Sẻ", "Giúp Đỡ", "Luôn Bên Anh nhé", "I Love You !,  "];
     var counter = 0;
-    
     var elem = $("#text-desc");
     setInterval(change, 3000);
     function change() {
