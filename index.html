@@ -236,7 +236,14 @@ var ParticlePool = (function() {
  */
 
 (function(canvas) {
-  var colorList = ['#FF5CA4','#fbf8ccff', '#fde4cfff', '#ffcfd2ff', '#f1c0e8ff', '#cfbaf0ff', '#a3c4f3ff', '#90dbf4ff', '#8eecf5ff', '#98f5e1ff', '#b9fbc0ff',]
+
+  var colorList = ['#ffadadff', '#ffd6a5ff', '#fdffb6ff', '#caffbfff', '#9bf6ffff', '#a0c4ffff', '#bdb2ffff', '#ffc6ffff', '#fffffcff',]
+
+  // var colorList =['#ff0a54ff', '#ff477eff', '#ff5c8aff', '#ff7096ff', '#ff85a1ff', '#ff99acff', '#fbb1bdff', '#f9bec7ff', '#f7cad0ff', '#fae0e4ff']
+
+  // var colorList = ['#fbf8ccff', '#fde4cfff', '#ffcfd2ff', '#f1c0e8ff', '#cfbaf0ff', '#a3c4f3ff', '#90dbf4ff', '#8eecf5ff', '#98f5e1ff', '#b9fbc0ff',]
+
+  // var colorList = ['#FF5CA4','#fbf8ccff', '#fde4cfff', '#ffcfd2ff', '#f1c0e8ff', '#cfbaf0ff', '#a3c4f3ff', '#90dbf4ff', '#8eecf5ff', '#98f5e1ff', '#b9fbc0ff',]
   var context = canvas.getContext('2d'),
       particles = new ParticlePool(settings.particles.length),
       particleRate = settings.particles.length / settings.particles.duration, // particles/sec
@@ -347,9 +354,9 @@ var ParticlePool = (function() {
         align-items: center;
         justify-content: center;
         margin-bottom: 5px;
-        text-align: center;">For my love !</div>
+        text-align: center;">For my love!</div>
   <script>
-    const text = ["Gửi Trúc Phương!", "Cảm Ơn Em", "Đã Bên Anh", "Và Luôn...", "Lắng Nghe" ,"San Sẻ", "Giúp Đỡ", "Luôn Bên Anh Nhé", "I Love You ! "];
+      const text = ["Truc Phuong !", "Thank you!", "Always beside me", "And always...", "Listening", "Helping", "Sharing", "Always be with me", "I love you ! ", "With all my love!", 'Thanks for all!','' ];
     var counter = 0;
     var elem = $("#text-desc");
     setInterval(change, 3000);
